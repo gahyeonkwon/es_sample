@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface EsRepository extends ElasticsearchRepository<CharacterDocument, Long> {
 
     Optional<CharacterDocument> findById(Long id);
-    Iterable<CharacterDocument> findAll();
     Optional<CharacterDocument> findByCharacterName(String name);
-
 }
+
+

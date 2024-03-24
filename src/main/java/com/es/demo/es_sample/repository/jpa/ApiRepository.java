@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface ApiRepository extends JpaRepository<Character, Long> {
 
+    Optional<Character> findByCharacterName(String name);
+
 }

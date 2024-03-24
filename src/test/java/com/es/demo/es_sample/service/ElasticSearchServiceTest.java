@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -129,20 +131,30 @@ class ElasticSearchServiceTest {
         //when
         // h2 에 데이터 적재
         apiService.insertCharacterData(data);
-        elasticsearchOperations.save(apiService.findAll().stream().map(CharacterDocument::dtoToDocument).collect(Collectors.toList()));
+        esRepository.saveAll(apiService.findAll().stream().map(CharacterDocument::dtoToDocument).collect(Collectors.toList()));
 
         //then
         CharacterDocument doc = esRepository.findById(1L).orElseThrow();
         assertEquals("오지환", doc.getCharacterName(), "찾기 실패");
 
-        long count = StreamSupport.stream(esRepository.findAll().spliterator(), false).count();
-        assertTrue(count >  0, "데이터가 없습니다");
-
-        //CharacterDocument doc2 = esRepository.findByCharacterName("오지환").get()
+        CharacterDocument doc2 = esRepository.findByCharacterName("오지환").orElseThrow();
+        assertEquals("오지환", doc2.getCharacterName(), "찾기 실패");
 
         assertFalse(deleteIndex("characters").value(), "인덱스 삭제 실패");
     }
 
+
+    @Test
+    public void searchTest2() throws IOException {//given
+
+        CharacterDocument doc = esRepository.findById(1L).orElseThrow();
+        assertEquals("오지환", doc.getCharacterName(), "찾기 실패");
+
+        CharacterDocument doc2 = esRepository.findByCharacterName("오지환").orElseThrow();
+        assertEquals("오지환", doc2.getCharacterName(), "찾기 실패");
+
+        assertFalse(deleteIndex("characters").value(), "인덱스 삭제 실패");
+    }
 
 
 }

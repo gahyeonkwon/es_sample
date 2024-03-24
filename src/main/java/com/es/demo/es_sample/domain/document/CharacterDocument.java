@@ -1,8 +1,9 @@
 package com.es.demo.es_sample.domain.document;
 
 import com.es.demo.es_sample.domain.dto.CharacterDto;
-import jakarta.persistence.Id;
+import com.es.demo.es_sample.domain.entity.Character;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -38,6 +39,12 @@ public class CharacterDocument {
                 .characterLevel(characterDto.getCharacter_level()).build();
     }
 
-
+    public static CharacterDocument entityToDocument(Character character) {
+        return builder()
+                .id(character.getId())
+                .worldName(character.getWorldName())
+                .characterName(character.getCharacterName())
+                .characterLevel(character.getCharacterLevel()).build();
+    }
 
 }

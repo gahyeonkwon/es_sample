@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -83,17 +84,17 @@ public class ApiService {
     }
 
     public void insertCharacterData(String data) throws JsonProcessingException {
-
-        List<Character> result = new ArrayList<>();
-        RankingDto.parseToDto(data).getRanking()
-                .stream().forEach(o ->  result.add(Character.dtoToEntity(o)));
-        apiRepository.saveAll( result );
+        apiRepository.saveAll( RankingDto.parseToDto(data).getRanking()
+                .stream().map(Character::dtoToEntity).collect(Collectors.toList()));
 
     }
 
     public List<CharacterDto> findAll() {
-        return apiRepository.findAll().stream().map(o -> CharacterDto.entityToDto(o))
+        return apiRepository.findAll().stream().map(CharacterDto::entityToDto)
                 .collect(Collectors.toList());
     }
 
+    public CharacterDto findByCharacterName(String name) {
+       return  CharacterDto.optionalEntityToDto(apiRepository.findByCharacterName(name));
+    }
 }

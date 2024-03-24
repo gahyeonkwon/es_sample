@@ -1,10 +1,13 @@
 package com.es.demo.es_sample.domain.dto;
 
+import com.es.demo.es_sample.domain.document.CharacterDocument;
 import com.es.demo.es_sample.domain.entity.Character;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.atomic.LongAccumulator;
 
 
@@ -45,15 +48,63 @@ public class CharacterDto {
         return builder()
                 .id(character.getId())
                 .date(character.getDate())
-                .world_name(character.getWorld_name())
+                .world_name(character.getWorldName())
                 .ranking(character.getRanking())
-                .character_name(character.getCharacter_name())
-                .character_level(character.getCharacter_level())
-                .character_exp(character.getCharacter_exp())
-                .class_name(character.getClass_name())
-                .sub_class_name(character.getClass_name())
-                .character_popularity(character.getCharacter_popularity())
-                .character_guildname(character.getCharacter_guildname())
+                .character_name(character.getCharacterName())
+                .character_level(character.getCharacterLevel())
+                .character_exp(character.getCharacterExp())
+                .class_name(character.getClassName())
+                .sub_class_name(character.getSubClassName())
+                .character_popularity(character.getCharacterPopularity())
+                .character_guildname(character.getCharacterGuildname())
                 .build();
     }
+
+
+    public static CharacterDto optionalEntityToDto(Optional<Character> character1) {
+
+        Character character = Character.builder().build();
+
+        if(character1.isPresent()) {
+            character = character1.get();
+
+            return builder()
+                    .id(character.getId())
+                    .date(character.getDate())
+                    .world_name(character.getWorldName())
+                    .ranking(character.getRanking())
+                    .character_name(character.getCharacterName())
+                    .character_level(character.getCharacterLevel())
+                    .character_exp(character.getCharacterExp())
+                    .class_name(character.getClassName())
+                    .sub_class_name(character.getSubClassName())
+                    .character_popularity(character.getCharacterPopularity())
+                    .character_guildname(character.getCharacterGuildname())
+                    .build();
+
+        } else {
+            throw new NoSuchElementException("데이터가 없습니다");
+        }
+
+    }
+
+    public static CharacterDto optionalDocToDto(Optional<CharacterDocument> character1) {
+
+        CharacterDocument character =  CharacterDocument.builder().build();
+
+        if(character1.isPresent()) {
+            character = character1.get();
+            return builder()
+                    .id(character.getId())
+                    .character_name(character.getCharacterName())
+                    .world_name(character.getWorldName())
+                    .character_level(character.getCharacterLevel())
+                    .build();
+
+        } else {
+            throw new NoSuchElementException("데이터가 없습니다");
+        }
+
+    }
+
 }

@@ -8,6 +8,11 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+
+
+
+//@EnableJpaRepositories(basePackages = "com.es.demo.es_sample.repository.jpa")
+//@EnableElasticsearchRepositories(basePackages = "com.es.demo.es_sample.repository.es")
 @SpringBootApplication
 public class EsSampleApplication {
 
