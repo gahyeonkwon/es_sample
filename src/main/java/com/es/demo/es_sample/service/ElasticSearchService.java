@@ -8,6 +8,8 @@ import com.es.demo.es_sample.repository.es.EsRepository;
 import com.es.demo.es_sample.repository.jpa.ApiRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ElasticSearchService {
 
     private final ElasticsearchOperations elasticsearchOperations;
@@ -33,7 +36,6 @@ public class ElasticSearchService {
     }
 
     public void saveAll(String data) throws JsonProcessingException {
-
         elasticsearchOperations.save(RankingDto.parseToDto(data).getRanking().stream()
                 .map(CharacterDocument::dtoToDocument).collect(Collectors.toList()));
     }
@@ -61,6 +63,7 @@ public class ElasticSearchService {
     }
 
     public Iterable<CharacterDocument> saveAllByRepo(List<Character> data) throws JsonProcessingException {
+        log.info(" data.size() =>" + data.size());
         return esRepository.saveAll(data.stream().map(CharacterDocument::entityToDocument).collect(Collectors.toList()));
     }
 
@@ -70,9 +73,17 @@ public class ElasticSearchService {
         return CharacterDto.optionalDocToDto(byCharacterName);
     }
 
+    public List<CharacterDto> findByNameLike(String name) {
+        return  esRepository.findByCharacterNameLike(name).stream().map(CharacterDto::docToDto).collect(Collectors.toList());
+    }
+
     public void deleteIndex(String indexName) {
         if(elasticsearchOperations.indexOps(IndexCoordinates.of(indexName)).exists()) {
             elasticsearchOperations.indexOps(IndexCoordinates.of(indexName)).delete();
+
         }
     }
+
+
+
 }

@@ -61,6 +61,16 @@ public class CharacterDto {
     }
 
 
+    public static CharacterDto docToDto(CharacterDocument characterDocument) {
+        return builder()
+                .id(characterDocument.getId())
+                .world_name(characterDocument.getWorldName())
+                .character_name(characterDocument.getCharacterName())
+                .character_level(characterDocument.getCharacterLevel())
+                .build();
+    }
+
+
     public static CharacterDto optionalEntityToDto(Optional<Character> character1) {
 
         Character character = Character.builder().build();

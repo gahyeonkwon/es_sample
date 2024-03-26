@@ -2,7 +2,8 @@ spring:
   profiles:
     active: test
   datasource:
-    url:  jdbc:h2:mem:es_sample
+    url: jdbc:h2:~/es_sample
+    #url:  jdbc:h2:mem:es_sample
     username: sa
     password:
     driver-class-name: org.h2.Driver

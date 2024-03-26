@@ -38,8 +38,12 @@ public class ApiService {
 
     public void scrapData(String url, String type, HttpServletRequest request) throws IOException {
 
-        insertCharacterData(connectUrl(url, type, request));
+        String data = insertCharacterData(connectUrl(url, type, request));
 
+        // test 를 위해 동일한데이터 넣기
+        for(int i=0; i<30; i++) {
+            insertCharacterData(data);
+        }
     }
 
 
@@ -83,9 +87,11 @@ public class ApiService {
         return responseData;
     }
 
-    public void insertCharacterData(String data) throws JsonProcessingException {
+    public String insertCharacterData(String data) throws JsonProcessingException {
         apiRepository.saveAll( RankingDto.parseToDto(data).getRanking()
                 .stream().map(Character::dtoToEntity).collect(Collectors.toList()));
+
+        return data;
 
     }
 
@@ -94,7 +100,11 @@ public class ApiService {
                 .collect(Collectors.toList());
     }
 
-    public CharacterDto findByCharacterName(String name) {
+    public CharacterDto findByName(String name) {
        return  CharacterDto.optionalEntityToDto(apiRepository.findByCharacterName(name));
+    }
+
+    public List<CharacterDto> findByNameLike(String name) {
+        return  apiRepository.findByCharacterNameLike(name).stream().map(CharacterDto::entityToDto).collect(Collectors.toList());
     }
 }

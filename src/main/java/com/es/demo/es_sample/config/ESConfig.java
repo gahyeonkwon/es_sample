@@ -23,6 +23,7 @@ public class ESConfig extends ElasticsearchConfiguration {
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
                 .connectedTo(host + ":" +port)
+                .withConnectTimeout(300000)
                 .build();
     }
 }

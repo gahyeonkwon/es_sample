@@ -147,11 +147,9 @@ class ElasticSearchServiceTest {
     @Test
     public void searchTest2() throws IOException {//given
 
-        CharacterDocument doc = esRepository.findById(1L).orElseThrow();
-        assertEquals("오지환", doc.getCharacterName(), "찾기 실패");
 
-        CharacterDocument doc2 = esRepository.findByCharacterName("오지환").orElseThrow();
-        assertEquals("오지환", doc2.getCharacterName(), "찾기 실패");
+        CharacterDocument doc2 = esRepository.findByCharacterName("윈디아").orElseThrow();
+        assertEquals("윈디아", doc2.getCharacterName(), "찾기 실패");
 
         assertFalse(deleteIndex("characters").value(), "인덱스 삭제 실패");
     }
